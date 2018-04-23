@@ -23,9 +23,9 @@ particular).
 
 ## Ancient Projects
 
-These are old, **very** old. Be gentile in your criticism. There may
-be a few bits that can be resurrected, but most of this should remain
-in the dustbin of history.
+These are old, **very** old. Be gentle in your criticism. There may be
+a few bits that can be resurrected, but most of this should remain in
+the dustbin of history.
 
 * [Plexus](https://sourceforge.net/projects/plexus/)
 * [Melange](https://sourceforge.net/projects/melange/)
