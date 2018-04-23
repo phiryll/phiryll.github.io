@@ -13,7 +13,7 @@ particular).
 * [Lexicographic Byte Order Encoding](projects/lexicographic.md)
 * [Persistent Binary Trie](projects/btrie.md)
 * [Recursive Bresenham's Line Algorithm](projects/bresenham.md)
-* [Front-to-Back Window Painting](projects/window-painting.md)
+* [Painting Windows Front-to-Back](projects/window-painting.md)
 
 ## [My Rules of Thumb](docs/rules-of-thumb.md)
 
