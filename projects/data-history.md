@@ -74,7 +74,7 @@ from it, even when those computed items represent the same thing. For
 example, different algorithms for performing OCR upon an image may be
 run, each producing different text.
 
-General Principles
+## General Principles
 
 Some of these are not required to support the above features, but are
 just generally good ideas.
