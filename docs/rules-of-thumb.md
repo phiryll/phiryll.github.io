@@ -52,7 +52,7 @@ If possible, avoid using semantic fields in your data as unique
 identifiers, **especially** if they are computed. The best unique
 identifiers are opaque and permanent. I have seen multiple projects
 founder, and sometimes fail, because unique identifiers were
-constructed hashing some semantic fields.
+constructed by hashing some semantic fields.
 
 ## Decide What Constitutes A First-Class Entity
 
