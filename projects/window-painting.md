@@ -1,7 +1,7 @@
 # Painting Windows Front-to-Back
 
 I should preface this one - the problem (and my solution) were in
-1993. I hope modern hardware and windowing systems don't need this
+1993\. I hope modern hardware and windowing systems don't need this
 kind of optimization any more.
 
 Most computer windowing systems paint windows back-to-front, because
