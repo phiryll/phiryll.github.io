@@ -111,6 +111,7 @@ Another thing that should be obvious, but it isn't. This is a common example:
 ```
 if( value == null ) { return null; }
 ```
+
 I can't begin to describe how much this bothers me. Yes, the
 programmer has kept an exception from reaching the UI, or otherwise
 immediately disrupting the system. But they've done something far
