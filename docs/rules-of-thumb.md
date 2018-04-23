@@ -46,6 +46,14 @@ This should be obvious, but for some reason it's not. Your
 requirements will change, all the time. Plan for it. Use an agile
 methodology if your situation allows.
 
+## Decide How Unique IDs Are Made Very Carefully
+
+If possible, avoid using semantic fields in your data as unique
+identifiers, **especially** if they are computed. The best unique
+identifiers are opaque and permanent. I have seen multiple projects
+founder, and sometimes fail, because unique identifiers were
+constructed hashing some semantic fields.
+
 ## Decide What Constitutes A First-Class Entity
 
 I've found it best to separate your model objects into exactly two
