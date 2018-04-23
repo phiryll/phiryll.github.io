@@ -15,6 +15,8 @@ particular).
 * [Recursive Bresenham's Line Algorithm](projects/bresenham.md)
 * [Painting Windows Front-to-Back](projects/window-painting.md)
 
-## [My Rules of Thumb](docs/rules-of-thumb.md)
+## Other Things
 
-## [Do Telescopes Need Lenses?](docs/lenses.md)
+* [My Rules of Thumb](docs/rules-of-thumb.md)
+* [Notes on Concurrency and Distributed Systems](docs/concurrency.md)
+* [Do Telescopes Need Lenses?](docs/lenses.md)
