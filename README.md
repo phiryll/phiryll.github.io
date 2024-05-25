@@ -19,7 +19,6 @@ particular).
 
 * [My Rules of Thumb](docs/rules-of-thumb.md)
 * [Notes on Concurrency and Distributed Systems](docs/concurrency.md)
-* [Do Telescopes Need Lenses?](docs/lenses.md)
 
 ## Ancient Projects
 
