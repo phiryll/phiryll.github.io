@@ -1,6 +1,12 @@
 # Jennifer’s Rules of Thumb
 _These are **NOT** requirements! These are rules of thumb!_
 
+Every rule here has caused a major project failure in my past when
+broken. That's why they're here. However, some rules aren't
+appropriate for some kinds of programming, like embedded systems,
+games, or flight control software. You know your system better than I
+do.
+
 ## Aphorisms
 
 * There are only three numbers in computer science: 0, 1, and Many.
@@ -9,40 +15,75 @@ _These are **NOT** requirements! These are rules of thumb!_
 * Favor immutability.
 * Check-then-act cannot be made thread-safe without synchronization.
 * Simple is usually better than complex but slightly faster.
-* "Premature optimization is the root of all evil." - Donald Knuth
+* "Premature optimization is the root of all evil." - Sir Tony Hoare
 
 ## Code Clearly
 
-Your code should be understandable without having to spend hours
-figuring it out. If you are coding a tricky algorithm, include links
-to comprehensive descriptions in the comments. If it's original,
-document it fully right there in the code. Use meaningful variable
-names. Don't reuse variables for more than one purpose. Document all
-assumptions fully, or (even better) encode them as assertions or
-checks.
+Entire books have been written on this topic, but the gist is always
+the same - make your code easy for others to understand. Many of the
+points made in this document are specific examples of this. Roughly
+70% of software development costs are maintenance costs, not the cost
+of the initial release. Being easier to understand means being faster
+to ship, easier to debug, and less likely to have bugs in the first
+place. It also helps tremendously with onboarding new engineers.
+
+Some small examples:
+
+* Use meaningful variable names.
+* Don't reuse variables for more than one purpose.
+* Document all assumptions fully, or even better, encode them as
+  assertions or checks.
+* Use early returns.
+* Indent exceptional behavior, keep the happy path outdented.
+* Keep functions focused on one job and reasonably small, for some
+  definition of "reasonably".
+* Include links to a tricky algorithm in the comments, or document it
+  fully right there.
+
+## Don't Optimize Prematurely
+
+Complicating code for performance reasons is seldom a good idea unless
+you're getting an algorithmic improvement out of it. Even then, it
+won't be worth it if the optimization doesn't make a perceptable
+difference overall. You should write simple and correct code first,
+including good tests and performance instrumention. Only after
+measuring performance under real world conditions should you decide
+what to optimize. If you already have good tests, you won't be as
+likely to break things when you experiment with different
+optimizations. In particular, micro-optimizations probably aren't
+going to make a difference if that thread of execution is also
+performing I/O.
+
+All of that said, there are situations where a 1% performance
+difference can be huge, like software that interfaces with the
+physical world, or systems that operate at Internet scale. If you have
+10,000 servers, a 1% improvement is serious money. But even in these
+cases, you should still get it correct first and optimize only after
+measuring.
 
 ## Model Things As They Are
 
 Don't get clever with your representations unless there's a **very**
-good reason. Running 5% faster is not a good reason, unless lives
-depend on it.
+good reason. Running 2% faster is usually not a good reason to
+sacrifice maintainability.
 
-Model a user with a User object, and an account with an Account
-object, and don't merge the two because a user can only have one
-account. That's today. Tomorrow, your B&P team will tell you that they
-just signed a contract for delivering the new capability of multiple
-accounts per user, and that you have one month to deliver.
+For example, model a user with a User object, and an account with an
+Account object. Don't merge the two because a user can only have one
+account. That's today. Tomorrow, your boss will tell you that they
+just signed a contract for delivering multiple accounts per user, and
+that you have one month to deliver.
 
-This principle goes further than that. Don't pack 4 independent byte
-values into a long just because you can. Use numbers, strings, and
-dates to model exactly those things. If you have a reference to other
-data, model that in the natural way. For example, if you have foreign
-keys in SQL, don't store them as numbers or varchars. Don't laugh,
-I've seen it happen.
+More examples:
+* Don't pack 4 independent byte values into a long just because you
+  can.
+* Use numbers, strings, and dates to model exactly those things.
+* If you have a reference to other data, model that in the natural
+  way. For example, if you have foreign keys in SQL, don't store them
+  as numbers or varchars. Don't laugh, I've seen it happen.
 
 ## Design For Change
 
-This should be obvious, but for some reason it's not. Your
+This should be obvious, but for some reason it isn't. Your
 requirements will change, all the time. Plan for it. Use an agile
 methodology if your situation allows.
 
@@ -50,26 +91,29 @@ methodology if your situation allows.
 
 If possible, avoid using semantic fields in your data as unique
 identifiers, **especially** if they are computed. The best unique
-identifiers are opaque and permanent. I have seen multiple projects
-founder, and sometimes fail, because unique identifiers were
-constructed by hashing some semantic fields.
+identifiers are opaque and permanent.
 
-## Decide What Constitutes A First-Class Entity
+## Cleanly Separate Independent and Dependent Entities
 
-I've found it best to separate your model objects into exactly two
-kinds of things, what I call first-class entities, and everything
-else. My usage of that term differs from the common usage, so I really
-need to rename the concept. A first-class entity:
-* Has identity, and a name by which it can be retrieved or referenced.
-* Has a generally independent life cycle. Its existence is usually not
-dependent on the existence of some other entity.
-* Can be shared, by reference.
+I'm using "entity" here as a general concept, because words like
+"object" and "record" are overloaded.
 
-Entities that are not first-class should probably not possess any of
-these properties. For example, an address can have a zip code. If that
-zip code is modeled as a number or text, then the zip code is not
-first-class. If that zip code is a separate entity referenced by the
-address, then it is first class. Deleting the address also deletes the
+Generally, an entity should have either an independent or a dependent
+life cycle, whether its existence is dependent on the existence of
+some other entity. This should be clear either from the entity's
+definition, or from comments if the definition doesn't make this
+clear.
+
+An independent entity should have identity, and a key by which it can
+be retrieved or referenced. An independent entity can be shared by
+using that reference. A dependent entity should not have any of these
+properties. It's best to avoid entities which have some aspects and
+not others, it should be all or nothing.
+
+For example, an address can have a zip code. If the zip code is
+modeled as a numerical or text field of the address, then the zip code
+is dependent. If the zip code is a separate entity referenced by the
+address, then it is independent. Deleting the address also deletes the
 zip code in the former case, but not the latter.
 
 ## Keep All Input Data
@@ -81,16 +125,20 @@ run if you keep that input around.
 Don't sanitize it, or clean it up in any way. Store it exactly as you
 got it. That also means you need to be capable of storing badly
 formatted or otherwise invalid data. You should generally assume that
-you have dirty data.
+any data given to you can be dirty. This does **not** mean raw data
+should be stored in your primary database. It doesn't even need to be
+accessible by your main application(s), but it should at least be in a
+log file or similar.
+
+This includes requests and responses to and from third party systems.
+It's very difficult to debug interactions with systems you don't own
+if you don't even know what the inputs or outputs were.
 
 Let's take the simple example of text indexing. What do you do when
 your tokenizer has a bug? When you encounter a new input format (MS
 updates Word again, e.g.)? When you suddenly have to deal with
-unplanned-for foreign languages? A customer in a previous job
-encountered exactly those issues. Unfortunately, they decided that
-they didn't have enough storage to keep those word docs around (don't
-get me started on the relative size of the indices involved). So
-they're stuck with bad output, permanently.
+unplanned-for foreign languages? If you don't have the original input,
+you won't be able to correct any incorrect data derived from it.
 
 ## Use Explicit String Encodings
 
@@ -100,18 +148,17 @@ default choice.
 
 ## Strive For Immutability
 
-This is often invoked in reference to Java, and has a very specific
-meaning (and requirements) there related to the JVM memory model. But
-the principle is definitely general, for the same exact reasons.
-Immutable data requires no coordination when shared. No coordination
-means no buggy code to implement the coordination, no coordination
-cost, and no consistency failures because some client failed to follow
-the coordination rules. It just makes everything both simpler **and**
-faster.
+This is often invoked in reference to Java, where it has a very
+specific meaning (and requirements). But the principle is general, for
+the same reasons. Immutable data requires no coordination when shared.
+No coordination means no buggy code to implement the coordination, no
+coordination cost, and no consistency failures because some client
+failed to follow the coordination rules. It just makes everything both
+simpler **and** faster.
 
 ## Don't Hide Bugs
 
-Another thing that should be obvious, but it isn't. This is a common example:
+This should be obvious, but isn't. This is a common example:
 1. Code throws an NPE.
 1. The programmer can't figure out why the reference is null at that point.
 1. A deadline is looming.
@@ -120,21 +167,20 @@ Another thing that should be obvious, but it isn't. This is a common example:
 if( value == null ) { return null; }
 ```
 
-I can't begin to describe how much this bothers me. Yes, the
-programmer has kept an exception from reaching the UI, or otherwise
-immediately disrupting the system. But they've done something far
-worse - they've allowed it to continue through the system
-unchallenged. Now the system is producing bad output, but there's no
-exception or logging to let anyone know. The last major system I
-worked on had a lot of this, and people's lives were potentially at
-risk. There is no excuse for this. At the very least, an error should
-be logged.
+This is very, very bad. Yes, the programmer has kept an exception from
+reaching the UI, or otherwise immediately disrupting the system. But
+they've done something far worse - they've allowed bad data to
+_silently_ continue through the system unchallenged. Now it's
+producing bad output, but there's no exception or logging to let
+anyone know. A project I worked on had a lot of this, and people's
+lives were at risk. There is no excuse for this. At the very least, an
+error should be logged.
 
 That segues nicely into situation #2. On that same project, we were
-actually instructed to **remove** the logging of errors, because it
-gave the field engineers the impression that our product wasn't
-working (the actual language was more along the lines of "It's #%^").
-Rather than educate our own employees at customer sites what a logged
-error might mean, we decided to hide the bugs. At the very least, this
-is unethical. And, you can't fix bugs of which you are unaware.
-
+told to **remove** error logging, because it gave the field engineers
+the impression that our product wasn't working (the actual language
+was more along the lines of "It's #%^"). Rather than educate our own
+employees, management decided to remove error logging. This is
+exceedingly unethical. Ironically, making the project seem like it had
+no errors caused it to accumulate even more errors instead, errors
+which could no longer be found.
