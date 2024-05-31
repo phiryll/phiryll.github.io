@@ -31,19 +31,19 @@ reply.
 * You may misinterpret the reply.
 * ...
 
-It may be the case that messengers send some kind of ack/nak without
+It may be the case that messengers send some kind of ack/nack without
 waiting for the recipient to answer (which may also fail to get
-delivered…). Protocols like TCP and devices like ECC RAM are designed
+delivered). Protocols like TCP and devices like ECC RAM are designed
 to handle some of these issues, so we don’t normally worry about
 getting a mangled message. Some message delivery systems also have the
 possibility of delivering duplicate messages.
 
-Let’s say you send a command to Alice to “Do X and return an ack/nak”.
-If you don’t get a reply, you will have no idea whether or not X has
-actually been done. Similarly, after Alice sends a reply, she may have
-no idea whether or not you have acted on it. Even if you get an ack,
-it may be the case that X was undone by someone else after Alice sent
-the ack.
+Let’s say you send a command to Alice to “Do X and return an
+ack/nack”. If you don’t get a reply, you will have no idea whether or
+not X has actually been done. Similarly, after Alice sends a reply,
+she may have no idea whether or not you have acted on it. Even if you
+get an ack, it may be the case that X was undone by someone else after
+Alice sent the ack.
 
 Because of the long delivery time, it is more obvious that any
 information can be outdated by the time it is received. That’s also
