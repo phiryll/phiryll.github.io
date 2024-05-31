@@ -14,8 +14,8 @@ do.
 * Favor composition over inheritance.
 * Favor immutability.
 * Check-then-act cannot be made thread-safe without synchronization.
-* Simple is usually better than complex but slightly faster.
-* "Premature optimization is the root of all evil." - Sir Tony Hoare
+* Simple is usually better than complex but slightly faster, or
+  "Premature optimization is the root of all evil." - Sir Tony Hoare
 
 ## Code Clearly
 
@@ -38,7 +38,7 @@ Some small examples:
 * Keep functions focused on one job and reasonably small, for some
   definition of "reasonably".
 * Include links to a tricky algorithm in the comments, or document it
-  fully right there.
+  fully in the code.
 
 ## Don't Optimize Prematurely
 
@@ -64,14 +64,12 @@ measuring.
 ## Model Things As They Are
 
 Don't get clever with your representations unless there's a **very**
-good reason. Running 2% faster is usually not a good reason to
-sacrifice maintainability.
+good reason. See the previous point.
 
 For example, model a user with a User object, and an account with an
 Account object. Don't merge the two because a user can only have one
-account. That's today. Tomorrow, your boss will tell you that they
-just signed a contract for delivering multiple accounts per user, and
-that you have one month to deliver.
+account. That's today. Tomorrow, your boss will tell you that you have
+one week to deliver multiple accounts per user.
 
 More examples:
 * Don't pack 4 independent byte values into a long just because you
@@ -79,13 +77,28 @@ More examples:
 * Use numbers, strings, and dates to model exactly those things.
 * If you have a reference to other data, model that in the natural
   way. For example, if you have foreign keys in SQL, don't store them
-  as numbers or varchars. Don't laugh, I've seen it happen.
+  as basic numbers or varchars. Don't laugh, I've seen it happen.
 
 ## Design For Change
 
 This should be obvious, but for some reason it isn't. Your
-requirements will change, all the time. Plan for it. Use an agile
-methodology if your situation allows.
+requirements will change, all the time. Plan for it.
+
+Use an agile methodology if your situation allows. I very much mean
+this in the sense of the [Agile
+Manifesto](https://agilemanifesto.org/), and **absolutely not** in the
+sense of whatever
+[this](https://www.researchgate.net/figure/SAFe-Big-Picture-In-SAFe-R-all-teams-are-part-of-the-Agile-Release-Train-ART-and-ARTs_fig3_323994688)
+is.
+
+Don't hard code constants that are likely to change, things like
+customer discounts, tax rates, time zones, countries, AWS regions,
+etc. Almost everything defined by people, and especially governments,
+is likely to change.
+
+If you can handle a probable future use case quickly and without
+adding much complexity, just do it. If you can't do that, create a low
+priority issue to save time if it ever becomes a problem.
 
 ## Decide How Unique IDs Are Made Very Carefully
 
@@ -99,10 +112,8 @@ I'm using "entity" here as a general concept, because words like
 "object" and "record" are overloaded.
 
 Generally, an entity should have either an independent or a dependent
-life cycle, whether its existence is dependent on the existence of
-some other entity. This should be clear either from the entity's
-definition, or from comments if the definition doesn't make this
-clear.
+life cycle. This should be clear either from the entity's definition,
+or from comments if the definition doesn't make this clear.
 
 An independent entity should have identity, and a key by which it can
 be retrieved or referenced. An independent entity can be shared by
@@ -111,10 +122,10 @@ properties. It's best to avoid entities which have some aspects and
 not others, it should be all or nothing.
 
 For example, an address can have a zip code. If the zip code is
-modeled as a numerical or text field of the address, then the zip code
-is dependent. If the zip code is a separate entity referenced by the
-address, then it is independent. Deleting the address also deletes the
-zip code in the former case, but not the latter.
+implemented as a numerical or text field of the address, then the zip
+code is dependent. If the zip code is a separate entity referenced by
+the address, then it is independent. Deleting the address also deletes
+the zip code in the former case, but not the latter.
 
 ## Keep All Input Data
 
@@ -124,8 +135,7 @@ run if you keep that input around.
 
 Don't sanitize it, or clean it up in any way. Store it exactly as you
 got it. That also means you need to be capable of storing badly
-formatted or otherwise invalid data. You should generally assume that
-any data given to you can be dirty. This does **not** mean raw data
+formatted or otherwise invalid data. This does **not** mean raw data
 should be stored in your primary database. It doesn't even need to be
 accessible by your main application(s), but it should at least be in a
 log file or similar.
@@ -134,11 +144,11 @@ This includes requests and responses to and from third party systems.
 It's very difficult to debug interactions with systems you don't own
 if you don't even know what the inputs or outputs were.
 
-Let's take the simple example of text indexing. What do you do when
-your tokenizer has a bug? When you encounter a new input format (MS
-updates Word again, e.g.)? When you suddenly have to deal with
-unplanned-for foreign languages? If you don't have the original input,
-you won't be able to correct any incorrect data derived from it.
+For example, let's say you have a text indexer. What do you do when
+your tokenizer has a bug? When you encounter a new or updated input
+format? When you suddenly have to deal with unplanned-for foreign
+languages? If you don't have the original input, you won't be able to
+correct any incorrect data derived from it.
 
 ## Use Explicit String Encodings
 
@@ -149,12 +159,12 @@ default choice.
 ## Strive For Immutability
 
 This is often invoked in reference to Java, where it has a very
-specific meaning (and requirements). But the principle is general, for
-the same reasons. Immutable data requires no coordination when shared.
-No coordination means no buggy code to implement the coordination, no
-coordination cost, and no consistency failures because some client
-failed to follow the coordination rules. It just makes everything both
-simpler **and** faster.
+specific meaning. But the principle is general, for the same reasons.
+Immutable data requires no coordination when shared. No coordination
+means no buggy code to implement the coordination, no coordination
+cost, and no consistency failures because some client failed to follow
+the coordination rules. It just makes everything both simpler **and**
+faster.
 
 ## Don't Hide Bugs
 
@@ -172,15 +182,12 @@ reaching the UI, or otherwise immediately disrupting the system. But
 they've done something far worse - they've allowed bad data to
 _silently_ continue through the system unchallenged. Now it's
 producing bad output, but there's no exception or logging to let
-anyone know. A project I worked on had a lot of this, and people's
-lives were at risk. There is no excuse for this. At the very least, an
-error should be logged.
+anyone know. At the very least, an error should be logged.
 
 That segues nicely into situation #2. On that same project, we were
 told to **remove** error logging, because it gave the field engineers
-the impression that our product wasn't working (the actual language
-was more along the lines of "It's #%^"). Rather than educate our own
-employees, management decided to remove error logging. This is
-exceedingly unethical. Ironically, making the project seem like it had
-no errors caused it to accumulate even more errors instead, errors
-which could no longer be found.
+the impression that our product wasn't working. Rather than educate
+our own employees, management decided to remove error logging. Given
+the nature of the project, this was exceedingly unethical. Ironically,
+making the project seem like it had no errors caused it to accumulate
+even more errors instead, errors which could no longer be found.
