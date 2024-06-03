@@ -51,4 +51,3 @@ true of memory reads in a modern CPU, we just don’t think about it
 most of the time. You’ll find that protocols like Paxos still work in
 this human problem domain, because they were designed with exactly
 these kinds of limitations in mind.
-
