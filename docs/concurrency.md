@@ -5,8 +5,8 @@ between a distributed system of computers and a distributed system of
 people is the time scale. With respect to correctness, atomicity,
 consistency, availability, and partition tolerance, a network of
 humans is no different. For computers, this is true not only for
-distances from the next rack to the other side of the world, but even
-within a single machine between cores, L* caches, RAM, and disk.
+communication to the other side of the world, but even within a single
+machine between cores, L* caches, RAM, and disk.
 
 To reason about whether some approach is correct/atomic/consistent/…,
 I’ve found it can be helpful to translate the problem to the domain of
@@ -45,7 +45,7 @@ she may have no idea whether or not you have acted on it. Even if you
 get an ack, it may be the case that X was undone by someone else after
 Alice sent the ack.
 
-Because of the long delivery time, it is more obvious that any
+Because of the long delivery time, it's much more obvious that any
 information can be outdated by the time it is received. That’s also
 true of memory reads in a modern CPU, we just don’t think about it
 most of the time. You’ll find that protocols like Paxos still work in
