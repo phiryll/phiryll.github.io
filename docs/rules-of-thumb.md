@@ -43,9 +43,9 @@ Some small examples:
 
 Complicating code for performance reasons is seldom a good idea unless
 you're getting an algorithmic improvement out of it. Even then, it
-won't be worth it if the optimization doesn't make a perceptable
+won't be worth it if the optimization doesn't make a perceptible
 difference overall. You should write simple and correct code first,
-including good tests and performance instrumention. Only after
+including good tests and performance instrumentation. Only after
 measuring performance should you decide what to optimize, preferably
 under real world conditions. If you already have good tests, you won't
 be as likely to break things when you experiment with different
