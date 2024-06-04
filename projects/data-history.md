@@ -20,8 +20,8 @@ representation in the system. The identity of an automated process
 must include which part of the process (if it does multiple things
 and/or uses multiple algorithms) and its version.
 
-All queries are at a specific point in time. A beneficial side effect
-is that all read data is effectively immutable, greatly reducing the
+All queries are at a specific point in time. A side effect of this is
+that all read data is effectively immutable, greatly reducing the
 overhead for managing concurrent reads.
 
 The database state can be branched, and those branches can be private
@@ -33,35 +33,35 @@ the authoritative database.
 
 Data can have relationships to other data, and those relationships are
 understood by the system. Relationships do not need to have a valid,
-existing target. Just like in the world wide web, dead links should be
-allowed. Allowing dead relationship targets means the system doesn't
-have to expend resources checking or maintaining their consistency.
+existing target. Just like in the world wide web, dead links are
+allowed. This reduces the resources needed for maintaining
+consistency.
 
-Relationships should not be constrained in multiplicity. The system
-should never have to check whether some other relationship exists when
-adding a new relationship.
+Relationships are not constrained in multiplicity. The system should
+never have to check whether some other relationship exists when adding
+a new relationship.
 
 ## Uncertainty is Represented
 
-It must be possible to represent not just actual facts, but
+It must be possible to represent not just actual facts, but also
 assertions. In this usage, an assertion is a relationship between the
 data doing the asserting and the data being asserted, including the
-uncertainty as measured by the asserter. Uncertainty in this case is
-not a probability, but a certainty factor (the rules for combining
-them are different). For example, "Alice is 70% certain that we will
-win the XYZ contract", or "Algorithm ABC version 3.5.2 is 93.45%
-certain that stock XYZ will fall 10% in the next week."
+uncertainty as measured by the asserter. Uncertainty is not a
+probability, but a certainty factor (the rules for combining them are
+different). For example, "Alice is 70% certain that we will win the
+XYZ contract", or "Algorithm ABC version 3.5.2 is 93.45% certain that
+stock XYZ will fall 10% in the next week."
 
 Contradictory information can be represented. Two algorithms or users
 can arrive at conflicting conclusions.
 
 ## Data has Provenance
 
-Where data comes from should also be in the database, with a
-relationship between the data and its source. This is not typically
-the same thing as the user who changed the data, although it might be.
-The source might be a newspaper or a sensor. Data might have multiple
-sources (a conclusion based upon many inputs, e.g.).
+Where data comes from is also in the database, with a relationship
+between the data and its source. This is not typically the same thing
+as the user who changed the data, although it might be. The source
+might be a newspaper or a sensor. Data might have multiple sources (a
+conclusion based upon many inputs, e.g.).
 
 ## General Principles
 
@@ -93,12 +93,6 @@ same object, because they have different authorizations. This probably
 isn't feasible at the level of properties, but there are use cases for
 it.
 
-Design the system to have an (external) API not tied to the internal
-data representation. For example, SQL is a horrible external API for
-an app with a RDBMS back end, because other people's code will depend
-on your schema, and you'll eventually be forbidden from changing it
-for any reason, even to fix a bug.
-
 ## Use Cases
 
 The most significant thing that this system provides is the ability to
@@ -107,12 +101,13 @@ essentially different ways of using this.
 
 An automated process is found to have a bug. This could be anything
 from a data ingestion process (parsing text, e.g.) to a complicated
-socio-economic link analysis algorithm. Keeping track of who/what made
-every change allows you to find all changes made by the specific buggy
-version(s) of the process. Keeping track of data provenance allows you
-to find all the data which used the false data as a source of
-information, transitively. Even if the false data is 20 steps removed
-from a conclusion, the system can follow that chain of provenance.
+socio-economic link analysis algorithm. Keeping track of who or what
+made every change allows you to find all changes made by the specific
+buggy version(s) of the process. Keeping track of data provenance
+allows you to find all the data which used the false data as a source
+of information, transitively. Even if the false data is 20 steps
+removed from a conclusion, the system can follow that chain of
+provenance.
 
 A sensor is found to be faulty. This is essentially the same use case.
 

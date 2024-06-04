@@ -126,6 +126,16 @@ short term. Here are a few:
   editable after they have been created, new correcting entries are
   made instead. There are also retention requirements.
 
+## Don't Expose Your Database Schema
+
+If you do, clients will come to depend on it and you'll eventually be
+forbidden from changing it for any reason, even to fix a bug.
+
+This should be followed at the service level, not just at the
+application level. Every database should be wholly owned by a single
+service, which should provide an API for the service, not the
+database.
+
 ## Decide How Unique IDs Are Made Very Carefully
 
 If possible, avoid using semantic fields in your data as unique
@@ -154,7 +164,8 @@ For example, an address can have a zip code. If the zip code is
 implemented as a numerical or text field of the address, then the zip
 code is dependent. If the zip code is a separate entity referenced by
 the address, then it is independent. Deleting the address also deletes
-the zip code in the former case, but not the latter.
+the zip code in the former case, but not the latter (ignoring
+cascade-delete semantics).
 
 ## Keep All Input Data
 
@@ -177,8 +188,7 @@ For example, let's say you have a text indexer. What do you do with
 existing derived data when your tokenizer has a bug? When you
 encounter a new or updated input format? When you suddenly have to
 deal with unplanned-for foreign languages? If you don't have the
-original input, you won't be able to correct any incorrect data
-derived from it.
+original input, you won't be able to correct any data derived from it.
 
 ## Use Explicit String Encodings
 
