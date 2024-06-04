@@ -22,8 +22,7 @@ market changes).
 Just about every day, someone interrupts the engineering team
 demanding to be told why a price is what it is. Some engineer then has
 to go get that version of the code, find all the third party requests
-and responses, and trace through it by hand. This takes hours. Every
-single day.
+and responses, and trace through it by hand. This takes hours.
 
 This process needs to be self-service for non-technical stakeholders.
 There's also the problem of how to present the data in a way that
