@@ -1,42 +1,40 @@
 # Data History and Provenance
 
-Described here are the essential capabilities of a data storage
-system. Some use cases are then presented demonstrating the kinds of
-problems that such a system could solve. Building the described system
-would be a non-trivial endeavor; this text merely describes the end
-goal, without any details of how one might get there.
+This doc describes a database I've wanted to create for a long time.
+In a sound byte, think "version control for data." Some use cases are
+then presented demonstrating the kinds of problems it could solve.
+Building this would be non-trivial, and might not even be possible at
+scale. This doc merely describes the end goal, without any details of
+how to get there.
 
 ## All History is Maintained
 
-Every data change is recorded. Historical data can be retrieved from
-any point in the past, and time-based queries and analyses are
-supported. When data is deleted, it is only marked as having been
-deleted. Every change must include information about it, in particular
-who did it and a message describing the reason for the change. That
-requirement is also extended to any automated processes, not just end
-users. A side effect of this is that these actors must have a
+Every data change is recorded, **in the database**. Historical data
+can be retrieved from any point in the past, and time-based queries
+and analyses are supported. When data is deleted, it is only marked as
+having been deleted. In addition to the normal metadata, every change
+must include who did it and a message describing the reason for the
+change. That requirement also applies to any automated processes, not
+just end users. A side effect of this is that all actors must have a
 representation in the system. The identity of an automated process
 must include which part of the process (if it does multiple things
-and/or uses multiple algorithms) and its version information.
+and/or uses multiple algorithms) and its version.
 
-The history of data can be branched, and those branches can be private
+All queries are at a specific point in time. A beneficial side effect
+is that all read data is effectively immutable, greatly reducing the
+need to manage concurrent reads.
+
+The database state can be branched, and those branches can be private
 to users. In other words, a user can run a number of what-if scenarios
 on the data, or even a what-if on top of a what-if, without impacting
-the authoritative data store.
-
-Note that this is exactly the same practice that software developers
-have been using for decades to track changes to program source code.
-
-A beneficial side effect of this feature is that all data is
-effectively immutable, greatly reducing the need to manage concurrent
-access.
+the authoritative database.
 
 ## Relationships are Represented
 
 Data can have relationships to other data, and those relationships are
-understood as such by the system. However, it should not be the case
-that relationships must have a valid, existing target. Just like in
-the world wide web, dead links should be allowed. Allowing dead
+understood by the system. However, it should not be the case that
+relationships must have a valid, existing target. Just like in the
+world wide web, dead links should be allowed. Allowing dead
 relationship targets means the system doesn't have to expend resources
 checking or maintaining their consistency.
 
@@ -51,67 +49,56 @@ assertions. In this usage, an assertion is a relationship between the
 data doing the asserting and the data being asserted, including the
 uncertainty as measured by the asserter. Uncertainty in this case is
 not a probability, but a certainty factor. For example, "Alice is 70%
-certain that we will win the XYZ contract", or "Link-analysis
-algorithm ABC version 3.5.2 is 93.45% certain that Osama bin Laden is
-holed up at X."
+certain that we will win the XYZ contract", or "Algorithm ABC version
+3.5.2 is 93.45% certain that stock XYZ will fall 10% in the next
+week."
 
-In particular, contradictory information can be represented. It should
-be possible for two algorithms, or end-users, to arrive at different
-conclusions given the same inputs.
+Contradictory information can be represented. It should be possible
+for two algorithms, or end-users, to arrive at conflicting
+conclusions.
 
 ## Data has Provenance
 
-Stated another way, most data comes from somewhere. That somewhere
-should also be in the data store, with a relationship between the data
-and its source. This is not typically the same thing as the user who
-changed the data, although it might be. The source might be a
-newspaper, a sensor for a measurement, or an original intelligence
-report for a derived intelligence report. Generally, data might have
-multiple sources (a conclusion based upon many inputs, e.g.).
-
-A single data item may have many different computed data items derived
-from it, even when those computed items represent the same thing. For
-example, different algorithms for performing OCR upon an image may be
-run, each producing different text.
+Where data comes from should also be in the database, with a
+relationship between the data and its source. This is not typically
+the same thing as the user who changed the data, although it might be.
+The source might be a newspaper or a sensor. Data might have multiple
+sources (a conclusion based upon many inputs, e.g.).
 
 ## General Principles
 
 Some of these are not required to support the above features, but are
 just generally good ideas.
 
-Support a binary data type that allows any possible values (i.e., not
-null-terminated, etc.).
+Support a binary data type allowing any possible value (e.g., not
+null-terminated).
 
-Store all externally supplied data in its raw form, in the data store.
+Use an explicit string encoding capable of handling Unicode.
+
+Store all externally supplied data in its raw form, in the database.
 All data sanitization, normalization, etc. is something you do
 afterwards, and should be treated no differently than producing any
 other kind of derived data. Fundamentally, normalizing line endings or
-removing bad characters is no different than entity extraction; some
+removing bad characters is no different than entity extraction. Some
 data goes in and new data computed from that comes out. One reason to
 do this is to avoid dropping data on the floor because it has failed
 some sanity check. Another reason will be covered by the use cases
 below.
 
-Use explicit string encodings, preferably UTF-8. If not that, then
-another encoding capable of handling Unicode.
-
-Divide your objects into first-class things (those that have identity,
-an independent life cycle, and can be shared by reference), and
-everything else (none of those properties). Allowing an object to have
-some of those properties but not all of them invariably leads to
-problems.
+Divide your entities into first-class things (those that have
+identity, an independent life cycle, and can be shared by reference),
+and everything else (none of those properties).
 
 Support access control at the finest possible level of detail. For
 example, two users see different properties or relationships on the
-same object, because they have different authorizations. If possible,
-this should be more robust than simple role-based security, and
-capable of handling the dissemination rules associated with
-classification and control markings.
+same object, because they have different authorizations. This probably
+isn't feasible at the level of properties, but there is a use case for
+it.
 
 Design the system to have an (external) API not tied to the internal
 data representation. For example, SQL is a horrible external API for
 an app with a RDBMS back end, because other people's code depends on
-your schema, and you will eventually be forbidden from changing that
+your schema, and you'll eventually be forbidden from changing that
 schema for any reason, even to fix a bug.
 
 ## Use Cases
