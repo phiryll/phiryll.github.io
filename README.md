@@ -12,6 +12,7 @@ names, in particular).
 * [Revision Control for Data](projects/data-history.md)
 * [Lexicographic Byte Order Encoding](projects/lexicographic.md)
 * [Persistent Byte Trie](projects/btrie.md)
+* [Mutation Tracker](projects/mutation-tracker.md)
 * [Recursive Bresenham's Line Algorithm](projects/bresenham.md)
 * [Painting Windows Front-to-Back](projects/window-painting.md)
 
