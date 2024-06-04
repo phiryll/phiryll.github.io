@@ -97,7 +97,7 @@ etc. Almost everything defined by people, and especially governments,
 is likely to change.
 
 If you can handle a probable future use case quickly and without
-adding much complexity, just do it. If you can't do that, create a low
+adding much complexity, just do it. If you can't, create a low
 priority issue to save time if it ever becomes a problem. Some things
 are worthwhile to get right early, because they're usually expensive
 to change later. At least have a plan if you can't deal with it in the
@@ -132,14 +132,17 @@ If possible, avoid using semantic fields in your data as unique
 identifiers, **especially** if they are computed. The best unique
 identifiers are opaque and permanent.
 
+For example, if you use someone's SSN as a primary key, what happens
+if you later discover that there was a typo?
+
 ## Cleanly Separate Independent and Dependent Entities
 
 I'm using "entity" here as a general concept, because words like
 "object" and "record" are overloaded.
 
 Generally, an entity should have either an independent or a dependent
-life cycle. This should be clear either from the entity's definition,
-or from comments if necessary.
+life cycle. This should be clear from the entity's definition, or from
+comments if necessary.
 
 An independent entity should have identity, and a key by which it can
 be retrieved or referenced. An independent entity can be shared by

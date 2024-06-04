@@ -1,8 +1,8 @@
 # Notes on Concurrency and Distributed Systems
 
-With respect to correctness, atomicity, consistency, availability, and
-partition tolerance, a network of humans is no different than a
-network of computers. For computers, this is true even within a single
+A network of humans is no different than a network of computers with
+respect to correctness, atomicity, consistency, availability, and
+partition tolerance. For computers, this is true even within a single
 machine between cores, L* caches, RAM, and disk.
 
 To reason about whether some approach is
@@ -35,10 +35,10 @@ messages.
 
 Let’s say you send a command to Alice to “Do X and return an
 ack/nack”. If you don’t get a reply, you will have no idea whether or
-not X has actually been done. Similarly, after Alice sends a reply,
-she may have no idea whether or not you received it. Even if you get
-an ack, X might have been undone by someone else after Alice sent the
-ack but before you received it.
+not X has actually been done. After Alice sends a reply, she may have
+no idea whether or not you received it. Even if you get an ack, X
+might have been undone by someone else after Alice sent the ack but
+before you received it.
 
 Because of the long delivery time, it's much more obvious that any
 information can be outdated by the time it is received. That’s also

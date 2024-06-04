@@ -9,13 +9,13 @@ how to get there.
 
 ## All History is Maintained
 
-Every data change is recorded. Historical data can be retrieved from
-any point in the past, and time-based queries and analyses are
-supported. When data is deleted, it is only marked as having been
-deleted. In addition to the normal metadata, every change must include
-who did it and a message describing the reason for the change. That
-requirement also applies to any automated processes, not just end
-users. A side effect of this is that all actors must have a
+Every data change is recorded separately. Historical data can be
+retrieved from any point in the past, and time-based queries and
+analyses are supported. When data is deleted, it is only marked as
+having been deleted. In addition to the normal metadata, every change
+must include who did it and a message describing the reason for the
+change. That requirement also applies to any automated processes, not
+just end users. A side effect of this is that all actors must have a
 representation in the system. The identity of an automated process
 must include which part of the process (if it does multiple things
 and/or uses multiple algorithms) and its version.
