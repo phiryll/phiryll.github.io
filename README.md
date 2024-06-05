@@ -6,8 +6,7 @@ These are not projects with repositories, which can be found on my
 [profile page](https://github.com/phiryll) and
 [gists](https://gist.github.com/phiryll). Some of these are in the
 formative stages, while others I've actually done at least once. They
-all need their own repositories once details get fleshed out (project
-names, in particular).
+all need their own repositories once details get fleshed out.
 
 * [Revision Control for Data](projects/data-history.md)
 * [Lexicographic Byte Order Encoding](projects/lexicographic.md)
