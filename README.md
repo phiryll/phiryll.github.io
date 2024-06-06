@@ -9,7 +9,6 @@ formative stages, while others I've actually done at least once. They
 all need their own repositories once details get fleshed out.
 
 * [Revision Control for Data](projects/data-history.md)
-* [Lexicographic Byte Order Encoding](projects/lexicographic.md)
 * [Persistent Byte Trie](projects/btrie.md)
 * [Collision Calculator](projects/collision-calculator.md)
 * [Mutation Tracker](projects/mutation-tracker.md)
