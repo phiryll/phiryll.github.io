@@ -8,7 +8,7 @@ of [geohash](https://en.wikipedia.org/wiki/Geohash).
 [This](https://pkg.go.dev/github.com/go-spatial/geom) might be an
 option for a library to use for this project. This could be used with
 an [ordered key-value
-store](https://en.wikipedia.org/wiki/Ordered_Key-Value_Store)
+store](https://en.wikipedia.org/wiki/Ordered_Key-Value_Store).
 
 The gist is that a polygon is subdivided into a set of rectangles
 which are then encoded, likely a very large set of rectangles. The
