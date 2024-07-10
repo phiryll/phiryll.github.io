@@ -1,7 +1,7 @@
 # Data History and Provenance
 
 This doc describes a database I've wanted to create for a long time.
-In a sound byte, think "version control for data." Some use cases are
+In a sound bite, think "version control for data." Some use cases are
 then presented demonstrating the kinds of problems it could solve.
 Building this would be non-trivial, and might not even be possible at
 scale. This doc merely describes the end goal, without any details of
